@@ -1,0 +1,53 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname es5) (read-case-sensitive #t) (teachpacks ((lib "drawings.ss" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "drawings.ss" "installed-teachpacks")) #f)))
+;risolve il problema dei percorsi di manhattan in uno spazio bidimensionale
+;riporta al caso base un problema complesso
+;nr di percorsi deisponibili dal punto O=(0,0) al punto A=(x, y)
+(define manhattan-2d;int
+  (lambda (x y); int
+    (cond ;casi base: quando una coordinata e nulla O e A si trovano sulla stessa retta: una sola strada/soluzione
+          ((= x 0) 1);x=0 -> 1
+          ((= y 0) 1);y=0 -> 1
+          ;caso ricorsivo: prevede che x, y siano positivi
+          ((and (> x 0) (> y 0))
+           ;somma ricorsiva: calcola le soluzioni portando le coordinate ai casi base
+           (+  (manhattan-2d (- x 1) y); porta la coordinata x a zero
+               (manhattan-2d x (- y 1))); porta la coordinata y a zero
+           )
+          ; gestione errori
+          (else "err: x o y < 0")
+      )
+    )
+  )
+;(manhattan-2d 9 3)
+
+
+;risolve il problema dei percorsi di manhattan in uno spazio tridimensionale
+;nr di percorsi deisponibili dal punto O=(0,0,0) al punto A=(x, y, z)
+(define manhattan-3d
+ (lambda (x y z)
+   (cond
+     ;casi base: quando una coordinata è uguale a zero
+     ((= x 0) (manhattan-2d y z))
+     ((= y 0) (manhattan-2d x z))
+     ((= z 0) (manhattan-2d x y))
+     ;caso ricorsivo: somma
+     ((and (and (> x 0) (> y 0)) (> z 0))
+           (+(+(manhattan-3d (- x 1) y z); porta la coordinata x a zero
+               (manhattan-3d x (- y 1) z)); porta la coordinata y a zero
+               (manhattan-3d x y (- z 1))); porta la coordinata z a zero   
+           )
+     ;gestione errori
+     (else "err: x, y, z < 0")
+      )
+     )
+  )
+ 
+
+(manhattan-3d 0 0 7)
+(manhattan-3d 2 0 2)
+(manhattan-3d 1 1 1)
+(manhattan-3d 1 1 5)
+(manhattan-3d 2 3 1)
+(manhattan-3d 2 3 3)

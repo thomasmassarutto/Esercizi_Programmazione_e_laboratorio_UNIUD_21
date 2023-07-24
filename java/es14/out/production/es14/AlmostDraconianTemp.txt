@@ -1,0 +1,119 @@
+//import puzzleboard.*;
+import java.util.*;
+public class PuzzleBoard {
+    // rappresentazione dello spazio vuoto
+    public static final int VUOTO=0;
+    public static final int ROW=0;
+    public static final int COL=1;
+
+    // variabili istanza
+    private int dimension;
+    private int[][] board;
+
+    // costruttore
+    public PuzzleBoard(int n){
+        this.dimension= n;
+        int[][] arr= {
+                {8,0,2},
+                {7,4,3},
+                {5,5,1}
+        };
+        this.board= arr;
+
+
+    }
+
+    private PuzzleBoard(int from, int to){
+
+    }
+
+    // metodi
+
+    // Un metodo per verificare se i tasselli sono ordinati;
+    public boolean isSorted(){
+        // variabile di confronto
+        int k=1;
+        for (int i = 0; i < this.dimension; i++) {
+            for (int j = 0; j < this.dimension; j++) {
+                if (this.board[i][j] == k){
+                    k++;
+                }else if((i== this.dimension && j== this.dimension) ){
+                    return (this.board[i][j] == VUOTO) ? true : false;
+                }else{
+                    return false;
+                }
+
+            }
+        }
+        return true;
+    }
+
+    // Un metodo per verificare se un dato tassello può essere spostato;
+    public boolean canBeMoved(int tile) {
+
+        int row = (tile - 1) % this.dimension; // Calcolo la coordinata x
+        int col = (tile - 1) / this.dimension; // Calcolo la coordinata y
+
+        // Verifica se il tassello può essere spostato nella posizione vuota
+        if (row >= 0 && col >= 0 && this.board[row][col] != VUOTO) {
+            if (row > 0 && this.board[row - 1][col] == VUOTO) {
+                return true; // Posizione vuota sopra il tassello
+            } else if (row < this.dimension - 1 && this.board[row + 1][col] == VUOTO) {
+                return true; // Posizione vuota sotto il tassello
+            } else if (col > 0 && this.board[row][col - 1] == VUOTO) {
+                return true; // Posizione vuota a sinistra del tassello
+            } else if (col < this.dimension - 1 && this.board[row][col + 1] == VUOTO) {
+                return true; // Posizione vuota a destra del tassello
+            }
+        }
+
+        return false;
+    }
+
+    // Un metodo per mostrare in forma testuale (stringa) la configurazione
+    public String toString(){
+        String theTable="";
+        for (int i = 0; i < this.dimension; i++) {
+            for (int j = 0; j < this.dimension; j++) {
+                if (this.board[i][j] == 0){
+                    theTable = theTable + "|" + "X" + "|";
+                }else {
+                    theTable = theTable + "|" + this.board[i][j] + "|";
+                }
+            }
+            theTable= theTable + "\n";
+        }
+
+        return theTable;
+    }
+
+
+    // Un metodo per spostare un dato tassello.
+
+
+    // privati
+
+    // ritorna il valore nella casella di coordinate (x, y)
+    public int valueOf(int x, int y){
+        return this.board[x][y];
+    }
+
+    // ritorna le coordinate del valore cercato
+    public int[] coord(int x){
+
+        int[] xCoord= {-1,-1};
+
+        for (int i= 0; i< this.dimension; i++){
+            for (int j= 0; j< this.dimension; j++){
+                if (this.board[i][j]== x){
+                   xCoord[ROW]=i;
+                   xCoord[COL]=j;
+                   return xCoord;
+                }
+            }
+        }
+
+        return xCoord;
+    }
+
+}

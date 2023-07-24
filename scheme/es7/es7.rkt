@@ -1,0 +1,91 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname es7) (read-case-sensitive #t) (teachpacks ((lib "drawings.ss" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "drawings.ss" "installed-teachpacks")) #f)))
+
+;'(): lista, in questo caso vuota 
+;null: lista vuota
+;null?: op booleano si chiede se lista è nulla
+;car: ritorna il primo elemento della lista
+;cdr: ritorna la coda della lista, tutti gli elementi tranne l'ultimo
+;cons: aggiunge 1 elemento ad una lista (cons 1 '(3 4))
+
+; belong? che, dati un intero x e una lista ordinata S, verifica se x è un
+; elemento di S.
+(define belong?; bool
+  (lambda (int list); int, lista !ordinata!
+    (cond((null? list); se la lista è nulla 
+           #false);ritorna falso
+         ((= int (car list)); se int è uguale al primo elemento di list
+           #true);ritorna vero
+         ;parte ricorsiva: sfrutta il fatto che sia una lista ordinata
+          ((> int (car list)); int > primo elemento di list
+           (belong? int (cdr list))); passo a belong? la coda della lista
+          ; in tutti gli altri casi else
+          (else #false)
+     )
+    )
+  )
+
+;position: dati un intero e una LISTA ORDINATA e senza ripetizioni, 
+;restituisce la posizione (indice) dell'intero nella lista
+(define position; int
+  (lambda (int list); intero, lista !ordinata!
+    (if (= int (car list)); se il primo elemento è uguale a int
+        0; ritorna 0
+        ;else
+        (+ (position int (cdr list)) 1)
+        )
+    )
+  )
+
+;(position 7 '(7 8 24 35 41)) ;→ 0
+;(position 35 '(7 8 24 35 41)) ;→ 3
+;(position 41 '(7 8 24 35 41)) ;→ 4
+
+
+;sorted-ins che, dati un intero e una LISTA ORDINATA SENZA RIPETIZIONI, restituisce
+;la lista ordinata e senza ripetizioni che contine anche l'intero.
+; FUNZIONAMENTO IN GENERALE
+;aggiunge la testa di list alla ricorsione che ha come lista la coda di list e stesso int
+;1 elem      2 elem          int     coda  
+;(car list)+(car (car list)) + int + (cdr (car (car list))
+(define sorted-ins; list
+  (lambda (int list); int, lista !ordinata!
+    (cond ((null? list); se la lista è vuota
+           (cons int null)); aggiunge int a lista vuota
+          
+          ((belong? int list); se elemento appartiene gia alla lista
+           list); ritorna la lista senza ulteriori modifiche
+          
+          ((< int (car list)); quando int è inferiore al primo elemento della lista
+          (cons int list)); genera una lista formata da int + list
+          
+          ; caso ricorsivo: nessuna delle 3 precedenti casistiche è risultata vera
+          ; passo in ricorsione la lista senza testa fino a che ritorno in un caso base
+          ; e alla fine genero il risultato come (car list) + ... + (car list) + int + (cdr list)
+          (else (cons (car list)(sorted-ins int (cdr list))))
+          )
+    )
+  )
+
+;(sorted-ins 24 '()) ;→ '(24)
+;(sorted-ins 5 '(7 8 24 35 41)) ;→ '(5 7 8 24 35 41)
+;(sorted-ins 24 '(7 8 24 35 41)) ;→ '(7 8 24 35 41)
+;(sorted-ins 27 '(7 8 24 35 41)) ;→ '(7 8 24 27 35 41)
+
+;Infine, applica sorted-ins per definire una procedura sorted-list che,
+;data una lista senza ripetizioni S, restituisce la lista ordinata
+;e senza ripetizioni S' che contine tutti e soli gli elementi di S
+
+(define sorted-list; lista ordinata
+  (lambda (S); lista senza ripetizioni
+    (if (null? S)
+        '();; se lista vuotal ritorna lista vuota
+        ;else; primo elemento di S viene ordinato e poi va i nricorsione con coda
+        (sorted-ins (car S) (sorted-list (cdr S))))
+   )
+  )
+
+
+
+(sorted-list '(35 8 41 24 7)); → '(7 8 24 35 41

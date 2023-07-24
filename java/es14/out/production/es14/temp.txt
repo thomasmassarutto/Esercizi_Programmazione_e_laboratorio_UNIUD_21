@@ -1,0 +1,54 @@
+public PuzzleBoard(int n){
+        this.dimension= n;
+        this.board= new int[n][n];
+
+        //creazione stack temporaneo
+        Stack<Integer> nbrs= new Stack<>();
+
+        //popolazione dello stack
+        for (int i = 0; i <= (this.dimension * this.dimension) - 1; i++) {  // Intervallo:  [1, n^2 - 1] e li inserisce nello stack
+            nbrs.push(i);
+        }
+
+        // randomizzo valori
+        Collections.shuffle(nbrs);
+
+        // riempio l'array
+        for (int i=0; i<this.dimension; i++){
+            for (int j=0; j<this.dimension; j++){
+                this.board[i][j]= nbrs.pop();
+            }
+        }
+
+    }
+
+        public void move(int from, int to){
+            int xFrom= xCoord(from);
+            int yFrom= yCoord(from);
+
+            int xTo= xCoord(to);
+            int yTo= yCoord(to);
+
+            // se i valori sono validi
+            if (this.board[xTo][yTo] == 0){
+                //salviamo temporaneamente le coordinate del punto
+                int xTemp= xTo;
+                int yTemp= yTo;
+
+                // scambiare i punti
+
+                // from -> to
+                xTo= xFrom;
+                yTo= yFrom;
+
+                // to-> from
+                xFrom= xTemp;
+                yFrom= yTemp;
+            }
+        }
+
+
+
+                     {8,0,2},
+                        {7,4,3},
+                        {6,5,1}

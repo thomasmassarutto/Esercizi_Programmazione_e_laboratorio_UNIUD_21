@@ -1,0 +1,56 @@
+COME FUNZIONANO LE DIAGONALI?
+
+In una scacchiera ci sono 2 tipi di diagonali:
+
+quelle per così: /
+quelle per così: \
+
+Per convenzione:
+le diagonali di tipo / sono indicizzate come riga-colonna (per convenzione diagUp)
+le diagonali di tipo \ sono indicizzate come riga+colonna (per convenzione diagDo)
+questo tipo di convenzione genera indici costanti per le varie diagonali
+
+ES:
+4 [ ][ ][ ][ ]
+3 [ ][ ][ ][X]
+2 [ ][ ][X][ ]
+1 [ ][X][ ][ ]
+   1  2  3  4
+
+La diagonale / contrassegnata con X
+ha differenza costante -1:
+row   col
+1  -  2  = -1
+2  -  3  = -1
+3  -  4  = -1
+
+Quindi la diagonale / è la diagonale -1
+
+riassunto veloce:
+colonna:       c
+riga:          r
+diagonale /:   r-c  (diagUp)
+diagonale \:   r+c (diagDown)
+
+NB: esistono 2 tipi di diagonale / e \, sono diverse!
+
+COME FUNZIONA UNA REGINA?
+Una regina rende inutilizzabile:
+    una riga
+    una colonna
+    una diagUp (detta /)
+    una diagDo (detta \)
+
+Es:
+4 [.][ ][ ][.]
+3 [.][ ][.][ ]
+2 [.][.][ ][ ]
+1 [X][.][.][.]
+   1  2  3  4
+
+La regina X rende inutilizzabile:
+
+riga:       1 (= r)
+colonna:    1 (= c)
+diagUp:     0 (= (r - c) = (1 - 1))
+diagUp:     2 (= (r + c) = (1 + 1))

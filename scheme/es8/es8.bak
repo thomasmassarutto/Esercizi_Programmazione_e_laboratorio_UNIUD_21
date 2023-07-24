@@ -1,0 +1,130 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname es8) (read-case-sensitive #t) (teachpacks ((lib "drawings.ss" "installed-teachpacks") (lib "teachpack.ss" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "drawings.ss" "installed-teachpacks") (lib "teachpack.ss" "installed-teachpacks")) #f)))
+;Dato un intero positivo n, la procedura hanoi-moves restituisce la sequenza (lista) di mosse che risolve il rompicapo
+;della Torre di Hanoi per n dischi, dove ciascuna mossa è descritta dalla coppia (lista di due elementi) di asticelle in cui
+;il disco spostato si trova immediatamente prima e immediatamente dopo quella mossa:
+
+
+(define hanoi-moves ; val: lista di coppie: mosse per risolvere hanoi
+  (lambda (n) ; n > 0 intero: nr dischi
+    (hanoi-rec n 1 2 3); n: dischi, 1,2,3: asticelle 
+    ))
+
+; ricorsione ad albero che risolve il problema della torre di hanoi
+(define hanoi-rec ; val: lista di coppie
+  (lambda (n s d t) ; n: intero che rappresenta i dischi, s(sorgente), d(destinazione), t(transizione): posizioni che rappresentano le asticelle
+    (if (= n 1)
+        (list (append s d))
+        ;else
+        (let ((m1 (hanoi-rec (- n 1) s t d)); m1=
+              (m2 (hanoi-rec (- n 1) t d s)); m2=
+              )
+          (list m1 (list (list s d) m2))
+          )
+        )
+    )
+  )
+
+
+; dati due interi n, k, con n > 0 e 0 ≤ k ≤ 2^(n)–1, restituisce la
+; configurazione al termine della k-ima mossa, rappresentata dal numero di dischi per ciascuna asticella.
+; Per k = 0 la procedura restituisce la configurazione iniziale in cui tutti i dischi si trovano in corrispondenza all’asticella 1
+; Una configurazione può essere descritta in questi termini da una terna di coppie (lista di tre liste): '('(a, b) '(c, d) '(e, f)), relative alle tre
+; asticciole: ogni coppia associa la posizione dell’asticella (1, 2 o 3) al corrispondente numero di dischi (un intero
+; compreso fra 0 ed n).
+
+(define hanoi-disks; list: lista composta da 3 sottoliste, sottoliste composte da 2 coppie ( '(nrColonna, nrDischi) )
+  (lambda (n k);n: numero dischi; k: numero mosse
+    (hanoi-coda 0 0 0 1 2 3 n k); dischiSorgente dischiDestinazione dischiTransizione paloSorgente paloDestinazione paloTransizione n k
+    )
+  )
+
+(define hanoi-coda; lista di coppie
+ (lambda (disSorg disDest disTran sorg dest trans n k); disSorg = num dischi in sorgente, disDest = num dischi in dest, disTran = num dischi in transizione
+                                                      ; sorg, dest, trans: numero pali
+                                                      ; n= numero tot dischi, k= numero mosse:
+                                                      ; interi non negativi ;0 <= k <= 2^n -1
+   (cond ;((= k 0); se k = 0 ritorna tutti i dischi sull asticella sorgente
+         ;(list (list sorg n) (list dest disDest) (list trans disTran))); list (nr_asticella numero_dischi_in_asticella)
+         
+         ; ricorsione a coda
+         ((= n 0); quando ci sono 0 dischi sfrutto i dati di default in entrata alla funzione 
+          (list (list sorg disSorg) (list dest disDest) (list trans disTran)); trittico di liste vuote
+          )
+         ;condizione
+         ; 2^(n) –1 mosse necessarie a trasferire una torre di n dischi
+         ; per spostare il disco più grande sono necessarie la metà delle mosse: 2^(n-1)
+         ; genero due sottoproblemi che trasferiscono una torre di n–1 dischi: solo in uno ci sarà il disco più grande
+         ; per stabilire dove è collocato l’n-imo disco: il più grande: 
+         ; se k < 2^(n-1): disco n in sottoproblema 1: risolto da una condizione
+         ; se k ≥ 2^(n-1): : disco n in sottoproblema 2: risolto dall else
+         ((< k (expt 2 (- n 1)))
+          ;sottoproblema 1
+          ; sposto un disco dalla pila del numero di dischi da risolvere alla sorgente
+          ; inverto transizione con destinazione: Destinazione->Transizione; transizione->Destinazione  
+          (hanoi-coda (+ disSorg 1)  disTran disDest sorg trans dest (- n 1) k)
+          )
+         ; sposto un disco dalla pila del numero di dischi da risolvere alla destinazione
+         ;Inverto sorgente con transizione: Sorgente -> transizione; Transizione->Sorgente
+         ; elimino 2^(n-1) mosse già risolte prima
+         (else (hanoi-coda disTran (+ disDest 1) disSorg trans dest sorg (- n 1) (- k (expt 2 (- n 1))) ))
+       )
+   )
+ )
+
+
+
+(hanoi-disks 3 0); → '((1 3) (3 0) (2 0))
+(hanoi-disks 3 1) ;→ '((3 0) (2 1) (1 2))
+(hanoi-disks 3 2) ;→ '((2 1) (1 1) (3 1))
+(hanoi-disks 3 3) ;→ '((1 1) (3 2) (2 0)) 
+(hanoi-disks 3 4) ;→ '((3 2) (2 1) (1 0))
+(hanoi-disks 3 5) ;→ '((2 1) (1 1) (3 1)) 
+(hanoi-disks 3 6) ;→ '((1 1) (3 0) (2 2)) 
+(hanoi-disks 3 7) ;→ '((3 0) (2 3) (1 0))
+(hanoi-disks 5 13) ;→ '((3 2) (2 1) (1 2))
+(hanoi-disks 15 19705) ;→ '((3 4) (2 9) (1 2))
+(hanoi-disks 15 32767) ;→ '((3 0) (2 15) (1 0))
+
+;(ii) Definisci una procedura hanoi-picture che, dati due interi n, k, con n > 0 e 0 ≤ k ≤ 2n–1, restituisce
+; un’immagine della disposizione dei dischi al termine della k-ima mossa.
+
+
+(define hanoi-picture; immagine
+  (lambda (n k); n: numero dischi; k: numero mosse: n > 0, 0 <= k <= (2^n)-1
+      (above (hanoi-pic  0 0 0 1 2 3 n k n) (towers-background n)); Stampa hanoi-pic sopra lo sfondo
+    )
+  )
+
+(define hanoi-pic; immagine che rappresenta i pali e i dischi del problema hanoi
+  (lambda (disSorg disDest disTran sorg dest trans n k a); disSorg = num dischi in sorgente, disDest = num dischi in dest, disTran = num dischi in transizione
+                                                         ; sorg, dest, trans: numero pali
+                                                         ; n, a = numero tot dischi, k= numero mosse:
+                                                         ; interi non negativi ;0 <= k <= 2^n -1
+
+    (cond ((= n 0); se tot dischi= 0
+           (disk-image 0 a 0 0)); passo a disk-imaga (teachpack): imgn soloi del disco più grande
+
+          ;stesso ragionamento del problema superiore
+                 
+          ((< k (expt 2 (- n 1)));
+           (above (hanoi-pic (+ disSorg 1) disTran disDest; transizione <---> destinazione per dischi
+                             sorg trans dest; transizione <---> destinazione per pali
+                             (- n 1) k a)
+                  (disk-image n a sorg disSorg))); sovrappongo le immagini successive in ricorsione
+
+          (else ; k >= 2^(n-1): ricorsione 
+           (above (hanoi-pic disTran (+ disDest 1) disSorg; transizione <---> sorgente per dischi
+                             trans dest sorg; transizione <---> sorgente per pali
+                             (- n 1) (- k (expt 2 (- n 1))) a)
+                  (disk-image n a dest disDest))); sovrappongo le immagini successive in ricorsione 
+          )))
+
+
+;(hanoi-picture 5 0)
+;(hanoi-picture 5 13)
+;(hanoi-picture 5 22)
+;(hanoi-picture 5 31)
+;(hanoi-picture 15 19705)
+
