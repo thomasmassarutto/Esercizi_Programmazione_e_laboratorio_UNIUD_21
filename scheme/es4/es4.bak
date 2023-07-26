@@ -135,8 +135,9 @@
 ;(btr-carry-sum ".++" "+" #\+)
 
 
-;funzione principale, date due stringhe in Rappresentazione Ternaria Bilanciata (+-.)
-;ne calcola la somma 
+; PROCEDURA PRINCIPALE,
+; date due stringhe in Rappresentazione Ternaria Bilanciata (+-.)
+; ne calcola la somma 
 (define btr-sum; string
   (lambda (Btr1 Btr2); string
     (normalized-btr (btr-carry-sum Btr1 Btr2 #\.))

@@ -55,15 +55,18 @@
            (cons int null)); aggiunge int a lista vuota
           
           ((belong? int list); se elemento appartiene gia alla lista
-           list); ritorna la lista senza ulteriori modifiche
+           list); ritorna la lista senza ulteriori modifiche, dato che questa è gia ordinata
           
           ((< int (car list)); quando int è inferiore al primo elemento della lista
           (cons int list)); genera una lista formata da int + list
           
           ; caso ricorsivo: nessuna delle 3 precedenti casistiche è risultata vera
-          ; passo in ricorsione la lista senza testa fino a che ritorno in un caso base
+          ; passo in ricorsione la lista senza testa fino a che ritorno in un caso base di quelli sopra
           ; e alla fine genero il risultato come (car list) + ... + (car list) + int + (cdr list)
-          (else (cons (car list)(sorted-ins int (cdr list))))
+          ; riaggiungendo la testa ogni volta
+          (else
+           (cons (car list)(sorted-ins int (cdr list)))
+           )
           )
     )
   )
@@ -79,13 +82,13 @@
 
 (define sorted-list; lista ordinata
   (lambda (S); lista senza ripetizioni
-    (if (null? S)
-        '();; se lista vuotal ritorna lista vuota
-        ;else; primo elemento di S viene ordinato e poi va i nricorsione con coda
+    (if (null? S); se lista vuota
+        '(); ritorna lista vuota
+        ;else; primo elemento di S viene ordinato tramite "sorted-ins" e poi va in ricorsione con coda
         (sorted-ins (car S) (sorted-list (cdr S))))
    )
   )
 
 
 
-(sorted-list '(35 8 41 24 7)); → '(7 8 24 35 41
+(sorted-list '(35 8 41 24 7)); → '(7 8 24 35 41)

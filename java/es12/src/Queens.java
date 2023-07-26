@@ -89,26 +89,29 @@ public class Queens {
      * lasciare le cose come stanno!
      */
 
+    // procedura ricorsiva che aggiunge una regina alla volta, appena trova uno spazio disponibile
+    // fino a che non termina lo spazio
     private static int numberOfCompletions( Board b ) {
 
         int n = b.size();
         int q = b.queensOn();
 
         if ( q == n ) {
-
             return 1;
-
         } else {
 
             int i = q + 1;
             int count = 0;
 
             for ( int j=1; j<=n; j=j+1 ) {
+                // se una casella non è sotto attacco
+                // viene aggiunta una regina
                 if ( !b.underAttack(i,j) ) {
+                    count = count + numberOfCompletions( b.addQueen(i,j) );// la regina è cmq al sicuro
+                }
+            }
 
-                    count = count + numberOfCompletions( b.addQueen(i,j) );
-                }}
-            return count;
+            return count;// regine messe sulla scacchiera
         }
     }
 

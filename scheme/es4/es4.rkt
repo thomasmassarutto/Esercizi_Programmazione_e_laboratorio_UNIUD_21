@@ -38,7 +38,7 @@
 ;equivalente in cui le eventuali cifre zero "#\." in testa, ininfluenti, sono rimosse
 (define normalized-btr; string
   (lambda (string);string
-    (cond ((= (string-length string) 0);se la stringa ha lunghezza 0, ritorna zero in strings
+    (cond ((= (string-length string) 0);se la stringa ha lunghezza 0, ritorna zero in rappresentazione 3naria
            "." )
           ((string=? (substring string 0 1) ".");se la prima cifra è ".", taglia il primo carattere e va in ricorsione con la coda:
           (normalized-btr (substring string 1 (string-length string)))); continua a togliere il primo carattere fino a lunghezza 0: primo caso
@@ -81,7 +81,7 @@
 ;(btr-digit-sum #\+ #\. #\-)
 
 
-;dati 2 char ne calcola il riporto ESCLUSO la somma
+;dati 2 char ne calcola il RIPORTO
 ;in un Sistema numerico ternario bilanciato
 (define twoDigitCarry; char
   (lambda (Cbtr1 Cbtr2);char
@@ -105,7 +105,7 @@
 ;restituisce il riporto BTR in uscita (carattere) conseguente alla somma delle cifre
 ;DIPENDE DA : twoDigitCarry
 (define btr-digit-carry; char
-  (lambda (Cbtr1 Cbtr2 Crip); char
+  (lambda (Cbtr1 Cbtr2 Crip);  char: char1, char2, riporto 
     ;prima fa il carry delle prime 2 cifre, poi le somma e trova il carry fra la somma e il riporto in entrata.
     ;Alla fine somma i 2 carry 
     (twoDigitSum (twoDigitCarry Cbtr1 Cbtr2) (twoDigitCarry (twoDigitSum Cbtr1 Cbtr2) Crip) )
@@ -116,13 +116,13 @@
 ;date le rappresentazioni BTR di due interi (stringhe) e il riporto in entrata (carattere),
 ;restituisce la rappresentazione BTR della somma inclusiva del riporto
 (define btr-carry-sum
-  (lambda (Sbtr1 Sbtr2 Crip); String, String, Char
-    (if (and (= (string-length Sbtr1) 1) (= (string-length Sbtr2) 1)); caso basico: le stringhe btr hanno lunghezza 1
+  (lambda (Sbtr1 Sbtr2 Crip); String, String, Char(riporto)
+    (if (and (= (string-length Sbtr1) 1) (= (string-length Sbtr2) 1)); caso base: le stringhe btr hanno lunghezza 1
         (string ; creo una stringa composta da
-         (btr-digit-carry (lsd Sbtr1) (lsd Sbtr2) Crip); il riporto in posizione piu significativa nella stringa
-         (btr-digit-sum (lsd Sbtr1) (lsd Sbtr2) Crip); la somma in posizione meno significativa nella stringa
+         (btr-digit-carry (lsd Sbtr1) (lsd Sbtr2) Crip); calcolo il riporto in posizione piu significativa nella stringa
+         (btr-digit-sum (lsd Sbtr1) (lsd Sbtr2) Crip); calcolo la somma in posizione meno significativa nella stringa
          )
-     ;else ;ricorsione
+     ;else ;ricorsione: 
         (string-append ;sommo due stringhe
          ;ricorsione fra testa di Sbtr1, testa Sbtr2, riporto fra cifre meno significative (dx) 
          (btr-carry-sum (head Sbtr1) (head Sbtr2) (btr-digit-carry (lsd Sbtr1) (lsd Sbtr2) Crip))
@@ -135,11 +135,13 @@
 ;(btr-carry-sum ".++" "+" #\+)
 
 
-;funzione principale, date due stringhe in Rappresentazione Ternaria Bilanciata (+-.)
-;ne calcola la somma 
+; PROCEDURA PRINCIPALE,
+; date due stringhe in Rappresentazione Ternaria Bilanciata (+-.)
+; ne calcola la somma 
 (define btr-sum; string
   (lambda (Btr1 Btr2); string
-    (normalized-btr (btr-carry-sum Btr1 Btr2 #\.))
+    (normalized-btr; prima normalizza le stringhe togliendo eventuali zero iniziali; R36
+     (btr-carry-sum Btr1 Btr2 #\.)); poi procede con le operazioni su stringhe "normali"; r115
     )
   )
 

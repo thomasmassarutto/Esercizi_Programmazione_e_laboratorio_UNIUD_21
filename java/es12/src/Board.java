@@ -59,7 +59,9 @@ public class Board {
 
     /*COSTRUTTORI*/
 
-    public Board(int n){//rappresenta la scacchiera
+    // rappresenta la scacchiera come metodo pubblico.
+    // si conosce solo la dimensione, non ci sono regine
+    public Board(int n){
 
         size= n;
         queens= 0;
@@ -70,27 +72,31 @@ public class Board {
         config= "";
     }
 
-    private Board(Board b, int r, int c){//crea una nuova scacchiera con regina in posizione (r, c)
+    //crea una nuova scacchiera con regina in posizione (r, c)
+    private Board(Board b, int r, int c){
 
-        size= b.size();
-        queens= b.queensOn() +1;
+        size= b.size();// la stessa size
+        queens= b.queensOn() +1;// aggiorna il counter regine
+
+        // aggiornamento delle liste contenenti le righe, colonne, diagonali occupate
         unRows= b.unRows.cons(r);
         unCols= b.unCols.cons(c);
         unDiagUp= b.unDiagUp.cons(r - c);
         unDiagDo= b.unDiagDo.cons(r + c);
-        config= b.arrangement() + b.newQuenPos(c, r);
+
+        config= b.arrangement() + b.newQuenPos(c, r);// aggiorna la rappresentazione testuale della scacchiera
     }
 
+    // metodi pubblici per leggere variabili private
     public int size(){
-
         return this.size;
     }
     public int queensOn(){
-
         return this.queens;
     }
 
-    //Idea generale: scandaglia le liste delle posizioni occupate per vedere se sono disponibili
+    // Controlla se la posizione (r,c) è sotto attacco
+    // Idea generale: scandaglia le liste delle posizioni occupate per vedere se sono disponibili
     public boolean underAttack(int r,int c){
 
         // posizione dove voglio mettere la regina
@@ -100,10 +106,10 @@ public class Board {
         int queenDiagDo= r+c;
 
         //liste di posizioni sotto attacco
-        SList<Integer> unRows= this.unRows;
-        SList<Integer> unCols= this.unCols;
-        SList<Integer> unDiagUp= this.unDiagUp;
-        SList<Integer> unDiagDo= this.unDiagDo;
+        SList<Integer> unRows= this.unRows;// righe sotto attacco
+        SList<Integer> unCols= this.unCols;// colonne sotto attacco
+        SList<Integer> unDiagUp= this.unDiagUp; // ...
+        SList<Integer> unDiagDo= this.unDiagDo;// ...
 
         // ciclo for che controlla iterativamente le colonne, righe / e \ occupate
         // il ciclo si ripete per ogni regina presente, per quello va da 1 a queens
@@ -115,10 +121,10 @@ public class Board {
                 queenDiagDo == unDiagDo.car()
                 ){
 
-                // posizione sotto attacco
+                //la posizione è sotto attacco
                 return true;
-            }else{// se il primo elemento non trova corrispondenza, lo tolgo e procedo col ciclo for
-
+            }else{
+                // se il primo elemento non trova corrispondenza, lo tolgo e procedo col ciclo for
                 unRows= unRows.cdr();
                 unCols= unCols.cdr();
                 unDiagUp= unDiagUp.cdr();
@@ -130,6 +136,7 @@ public class Board {
         return false;
     }
 
+    // aggiunge una regina in posizione (r,c)
     public Board addQueen(int r,int c){
 
         return new Board(this, r, c);
@@ -137,7 +144,8 @@ public class Board {
 
 
     /*METODI PRIVATI*/
-    private String arrangement(){// rapp. testuale della tavola
+    // rapp. testuale della tavola
+    private String arrangement(){
 
         return this.config;
     }

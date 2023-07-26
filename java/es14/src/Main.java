@@ -17,28 +17,29 @@ public class Main {
                 gui.setNumber(i+1,j+1, game.board[i][j]);
             }
         }
-        System.out.println(game.coord(0)[0] +" "+ game.coord(0)[1] );
-        int k;
 
+        // variabile che "sente" il click del mouse
+        int k;
         while(!game.isSorted()){
             k = gui.get();
             int[] vuotoCoord= game.coord(0);
             int[] kCoord= game.coord(k);
 
-            //System.out.println((kCoord[ROW] +1) +" "+ (kCoord[COL] +1) );
-            //System.out.println((vuotoCoord[ROW] +1) +" "+ (vuotoCoord[COL] +1) );
             if (game.canBeMoved(k)){
                 // aggiornare gioco
                 game.moveTile(k);
-                //System.out.println(game.toString());
+
                 // aggiornare gui
+
+                // aggiorno posizione tile spostato
                 gui.setNumber(vuotoCoord[ROW] +1,vuotoCoord[COL] +1,k);
+
+                // aggiornare posizione vuota
                 //gui.clear(kCoord[ROW] +1,kCoord[COL]+1);
                 gui.setNumber(kCoord[ROW] +1,kCoord[COL]+1, 0);
                 gui.display();
             }
         }
-        //System.out.println(Game.isSorted());
 
     }
 }

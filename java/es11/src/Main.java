@@ -36,12 +36,16 @@ public class Main {
 
     public static IntSList josephus (int n){
         RoundTable tav= new RoundTable(n);
-
+        /*
+        Fintantochè ci sono più di 2 cavalieri,
+        in tavola si serve il vicino e si passa la brocca
+         */
         while ( tav.numberOfKnights() > 2){
 
             tav= tav.serveNeighbour();
             tav= tav.passJug();
         }
+        // gli ultimi 2
         return tav.servingKnights();
     }
 }

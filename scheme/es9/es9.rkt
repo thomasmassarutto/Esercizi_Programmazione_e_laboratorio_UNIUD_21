@@ -87,7 +87,7 @@
       )
     )
   )
-;(indexOfChar alfabetoLatino #\X); 20
+
 ;(scorrimento alfabetoLatino #\A)
 ;(scorrimento alfabetoLatino #\B)
 ;(scorrimento alfabetoLatino #\R)
@@ -97,7 +97,7 @@
 ;(scorrimento alfabetoLatino #\X)
 
 ;Parte II
-"parte2"
+
 (define H
   (lambda (f g);; due funzioni (add, mul pow)
     (lambda (m n)

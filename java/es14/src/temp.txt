@@ -12,7 +12,6 @@ public PuzzleBoard(int n){
 
         // randomizzo valori
         Collections.shuffle(nbrs);
-
         // riempio l'array
         for (int i=0; i<this.dimension; i++){
             for (int j=0; j<this.dimension; j++){

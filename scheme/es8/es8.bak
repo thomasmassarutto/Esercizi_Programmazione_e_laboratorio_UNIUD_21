@@ -15,12 +15,13 @@
 (define hanoi-rec ; val: lista di coppie
   (lambda (n s d t) ; n: intero che rappresenta i dischi, s(sorgente), d(destinazione), t(transizione): posizioni che rappresentano le asticelle
     (if (= n 1)
-        (list (append s d))
+         (cons s d)
         ;else
         (let ((m1 (hanoi-rec (- n 1) s t d)); m1=
               (m2 (hanoi-rec (- n 1) t d s)); m2=
               )
-          (list m1 (list (list s d) m2))
+          ;(cons  m1 (cons  (cons  s d) m2))
+          (list m1 s d m2)
           )
         )
     )
@@ -50,7 +51,7 @@
          
          ; ricorsione a coda
          ((= n 0); quando ci sono 0 dischi sfrutto i dati di default in entrata alla funzione 
-          (list (list sorg disSorg) (list dest disDest) (list trans disTran)); trittico di liste vuote
+          (list (list sorg disSorg) (list dest disDest) (list trans disTran )); trittico di liste vuote
           )
          ;condizione
          ; 2^(n) –1 mosse necessarie a trasferire una torre di n dischi
@@ -66,7 +67,7 @@
           (hanoi-coda (+ disSorg 1)  disTran disDest sorg trans dest (- n 1) k)
           )
          ; sposto un disco dalla pila del numero di dischi da risolvere alla destinazione
-         ;Inverto sorgente con transizione: Sorgente -> transizione; Transizione->Sorgente
+         ; Inverto sorgente con transizione: Sorgente -> transizione; Transizione->Sorgente
          ; elimino 2^(n-1) mosse già risolte prima
          (else (hanoi-coda disTran (+ disDest 1) disSorg trans dest sorg (- n 1) (- k (expt 2 (- n 1))) ))
        )
@@ -76,16 +77,16 @@
 
 
 (hanoi-disks 3 0); → '((1 3) (3 0) (2 0))
-(hanoi-disks 3 1) ;→ '((3 0) (2 1) (1 2))
-(hanoi-disks 3 2) ;→ '((2 1) (1 1) (3 1))
-(hanoi-disks 3 3) ;→ '((1 1) (3 2) (2 0)) 
-(hanoi-disks 3 4) ;→ '((3 2) (2 1) (1 0))
-(hanoi-disks 3 5) ;→ '((2 1) (1 1) (3 1)) 
-(hanoi-disks 3 6) ;→ '((1 1) (3 0) (2 2)) 
-(hanoi-disks 3 7) ;→ '((3 0) (2 3) (1 0))
-(hanoi-disks 5 13) ;→ '((3 2) (2 1) (1 2))
-(hanoi-disks 15 19705) ;→ '((3 4) (2 9) (1 2))
-(hanoi-disks 15 32767) ;→ '((3 0) (2 15) (1 0))
+;(hanoi-disks 3 1) ;→ '((3 0) (2 1) (1 2))
+;(hanoi-disks 3 2) ;→ '((2 1) (1 1) (3 1))
+;(hanoi-disks 3 3) ;→ '((1 1) (3 2) (2 0)) 
+;(hanoi-disks 3 4) ;→ '((3 2) (2 1) (1 0))
+;(hanoi-disks 3 5) ;→ '((2 1) (1 1) (3 1)) 
+;(hanoi-disks 3 6) ;→ '((1 1) (3 0) (2 2)) 
+;(hanoi-disks 3 7) ;→ '((3 0) (2 3) (1 0))
+;(hanoi-disks 5 13) ;→ '((3 2) (2 1) (1 2))
+;(hanoi-disks 15 19705) ;→ '((3 4) (2 9) (1 2))
+;(hanoi-disks 15 32767) ;→ '((3 0) (2 15) (1 0))
 
 ;(ii) Definisci una procedura hanoi-picture che, dati due interi n, k, con n > 0 e 0 ≤ k ≤ 2n–1, restituisce
 ; un’immagine della disposizione dei dischi al termine della k-ima mossa.
@@ -123,8 +124,8 @@
 
 
 ;(hanoi-picture 5 0)
-;(hanoi-picture 5 13)
-;(hanoi-picture 5 22)
-;(hanoi-picture 5 31)
-;(hanoi-picture 15 19705)
+(hanoi-picture 5 13)
+(hanoi-picture 5 22)
+(hanoi-picture 5 31)
+(hanoi-picture 15 19705)
 

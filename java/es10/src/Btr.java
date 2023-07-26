@@ -4,7 +4,7 @@ public class Btr {
         int n = btr.length();
         char lsb = btr.charAt(n-1);
 
-        if (n == 1){
+        if (n == 1){// casi base
             if (lsb == '+'){
                 return "+-";
             }else{
@@ -36,7 +36,7 @@ public class Btr {
 
         return btrCpl;
     }
-    // complemento a 1 senza variabile ausiliaria
+    // complemento a 1 senza variabile ausiliaria (alternativa)
     public static String onesComplementV2 (String btr) {
 
         int btrLength = btr.length();
@@ -50,6 +50,8 @@ public class Btr {
         }
         return btr;
     }
+
+    // ritorna la testa della stringa da 0 a index
     private static String btrHead (String btr, int index ){
 
         String head= "";
@@ -60,6 +62,7 @@ public class Btr {
         }
     }
 
+    // ritorna la testa della stringa da index a fine stringa
     private static String btrTail (String btr, int index ){
 
         String tail= "";

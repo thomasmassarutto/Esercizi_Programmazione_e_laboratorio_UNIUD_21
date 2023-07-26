@@ -68,9 +68,24 @@
     )
   )
 
-(sorted-ins 24 '()) ;→ '(24)
-(sorted-ins 5 '(7 8 24 35 41)) ;→ '(5 7 8 24 35 41)
-(sorted-ins 24 '(7 8 24 35 41)) ;→ '(7 8 24 35 41)
-(sorted-ins 27 '(7 8 24 35 41)) ;→ '(7 8 24 27 35 41)
+;(sorted-ins 24 '()) ;→ '(24)
+;(sorted-ins 5 '(7 8 24 35 41)) ;→ '(5 7 8 24 35 41)
+;(sorted-ins 24 '(7 8 24 35 41)) ;→ '(7 8 24 35 41)
+;(sorted-ins 27 '(7 8 24 35 41)) ;→ '(7 8 24 27 35 41)
+
+;Infine, applica sorted-ins per definire una procedura sorted-list che,
+;data una lista senza ripetizioni S, restituisce la lista ordinata
+;e senza ripetizioni S' che contine tutti e soli gli elementi di S
+
+(define sorted-list; lista ordinata
+  (lambda (S); lista senza ripetizioni
+    (if (null? S)
+        '();; se lista vuotal ritorna lista vuota
+        ;else; primo elemento di S viene ordinato e poi va i nricorsione con coda
+        (sorted-ins (car S) (sorted-list (cdr S))))
+   )
+  )
 
 
+
+(sorted-list '(35 8 41 24 7)); → '(7 8 24 35 41

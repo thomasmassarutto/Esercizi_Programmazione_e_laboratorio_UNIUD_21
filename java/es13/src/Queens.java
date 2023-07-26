@@ -147,18 +147,14 @@ public class Queens {
             // controlliamo le colonne: j rappresenta l'indice di colonna
             for (int j= 1; j<=n; j++){
 
-                // se la casella (i,j) non è minacciata aggiungo una
-                // regina aggiornando la variabile count:
-                // count = count + numberOfCompletions( board.addQueen(i,j) )
-                // numberOfCompletions( board.addQueen(i,j) return 1 se q==n
-                //
+                // se non è sotto attacco, aggiungo una regina sulla board
+                // e aggiorno la sua posizione il lista
                 if ( !board.underAttack(i, j) ){
 
                     list = list.append( listOfCompletions(board.addQueen(i,j)) );
                 }
             }//for
 
-            //finito il ciclo ritorno la variabile count
             return list;
         }
     }

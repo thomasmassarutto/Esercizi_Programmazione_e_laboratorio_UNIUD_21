@@ -15,18 +15,19 @@
 (define hanoi-rec ; val: lista di coppie
   (lambda (n s d t) ; n: intero che rappresenta i dischi, s(sorgente), d(destinazione), t(transizione): posizioni che rappresentano le asticelle
     (if (= n 1)
-         (cons s d)
+        (list (list s d))
         ;else
-        (let ((m1 (hanoi-rec (- n 1) s t d)); m1=
-              (m2 (hanoi-rec (- n 1) t d s)); m2=
+        (let ((m1 (hanoi-rec (- n 1) s t d)); in una "mossa" scambio d <-> t
+              (m2 (hanoi-rec (- n 1) t d s)); in una "mossa" scambio s <-> t
               )
-          ;(cons  m1 (cons  (cons  s d) m2))
-          (list m1 s d m2)
+          (append m1 (cons (list s d) m2))
           )
         )
     )
   )
 
+"hanoi moves"
+(hanoi-moves 3)
 
 ; dati due interi n, k, con n > 0 e 0 ≤ k ≤ 2^(n)–1, restituisce la
 ; configurazione al termine della k-ima mossa, rappresentata dal numero di dischi per ciascuna asticella.
@@ -42,7 +43,9 @@
   )
 
 (define hanoi-coda; lista di coppie
- (lambda (disSorg disDest disTran sorg dest trans n k); disSorg = num dischi in sorgente, disDest = num dischi in dest, disTran = num dischi in transizione
+ (lambda (disSorg disDest disTran sorg dest trans n k); disSorg = num dischi in sorgente,
+                                                      ; disDest = num dischi in dest,
+                                                      ; disTran = num dischi in transizione
                                                       ; sorg, dest, trans: numero pali
                                                       ; n= numero tot dischi, k= numero mosse:
                                                       ; interi non negativi ;0 <= k <= 2^n -1
@@ -66,16 +69,19 @@
           ; inverto transizione con destinazione: Destinazione->Transizione; transizione->Destinazione  
           (hanoi-coda (+ disSorg 1)  disTran disDest sorg trans dest (- n 1) k)
           )
+         ; else
          ; sposto un disco dalla pila del numero di dischi da risolvere alla destinazione
-         ;Inverto sorgente con transizione: Sorgente -> transizione; Transizione->Sorgente
+         ; Inverto sorgente con transizione: Sorgente -> transizione; Transizione->Sorgente
          ; elimino 2^(n-1) mosse già risolte prima
-         (else (hanoi-coda disTran (+ disDest 1) disSorg trans dest sorg (- n 1) (- k (expt 2 (- n 1))) ))
+         (else
+          (hanoi-coda disTran (+ disDest 1) disSorg trans dest sorg (- n 1) (- k (expt 2 (- n 1))) ); ricorsione in delega 
+          )
        )
    )
  )
 
 
-
+"hanoi disks"
 (hanoi-disks 3 0); → '((1 3) (3 0) (2 0))
 ;(hanoi-disks 3 1) ;→ '((3 0) (2 1) (1 2))
 ;(hanoi-disks 3 2) ;→ '((2 1) (1 1) (3 1))
