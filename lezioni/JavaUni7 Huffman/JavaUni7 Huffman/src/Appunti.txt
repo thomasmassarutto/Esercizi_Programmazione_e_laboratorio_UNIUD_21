@@ -1,0 +1,147 @@
+CODIFICA HUFFMAN:
+USATA PER COMPRIMERE DOCUMENTI
+CODIFICA OTTIMALE FRA QUELLE CHE RAPPRESENTANO OGNI ELEMENTO INDIPENDENTEMENTE DAL CONTESTO
+
+Esempio:
+alfabeto fatto da 4 simboli: A, T, C, G
+
+A T T C T A C C T T G T
+
+Bastano 2 bit a carattere:
+A: 00
+T: 01
+C: 10
+G: 11
+
+A  T  T  C  T  A  C  C  T  T  G  T
+00 01 01 10 01 00 10 10 01 01 11 01
+
+La codifica ha 24 simboli
+
+oss:
+T: compare tante volte
+G: compare poche volte
+
+Posso associare a T una rappresentazione più corta
+e a G una rappresentazione più lunga, con il fine
+di risparmiare spazio.
+
+simbolo occorrenze
+G       1
+A       2
+C       3
+T       6
+
+Prima quelli che occorrono poche volte,
+
+ogni coppia puo essere vista come un albero da 1 nodo
+
+lista è: (simbolo, occorrenza)
+
+<(G : 1), (A : 2), (C : 3), (T : 6) >
+
+Costruzione albero:
+-aggregazione 2 elementi con minor peso e riordino:
+
+(simbolo, simbolo : somma occorrenze)
+
+(G : 1) (A : 2) -> (G,A : 1+2=3)
+
+<(G,A : 3), (C : 3), (T : 6) >
+  / \
+ G   A
+
+
+-aggregazione 2 elementi con minor peso e riordino:
+
+ (G,A : 3) (C : 3) -> ((G,A), C :3+3=6)
+
+<(G,A), C : 6), (T : 6) >
+   /    \
+ (G,A)   C
+  / \
+ G   A
+
+ -aggregazione 2 elementi con minor peso e riordino:
+
+  ((G,A), C : 6) (T : 6)  -> (((G,A), C), T : 6 + 6= 12)
+
+ <(((G,A), C), T) :  12)  >
+        /       \
+    (G,A,C)      T
+     /    \
+  (G,A)    C
+   / \
+  G   A
+
+  Viene creato così un albero di Huffman:
+        (G,A,C,T)
+          /     \
+     (G,A,C)     T
+       /   \
+    (G,A)   C
+     / \
+    G   A
+
+In questo esempio la fase di riordinamento sembra non avvenire mai per via del numero delle occorrenze
+Le foglie sono i simboli dell'alfabeto
+Il simbolo che compare di meno sta più in alto in gerarchia
+
+La chiave della codifica è il percorso dalla radice al simbolo.
+Tutti gli alberi sono di 2 diramazioni quindi posso
+associare 0 e 1 alle scelte che faccio.
+
+0: "scendo a sinistra"
+1: "scendo a destra"
+
+Così facendo la tabella diventa:
+simbolo codifica
+G       000
+A       001
+C       01
+T       1
+
+Codificando il messaggio preedente:
+A   T   T   C   T   A   C   C   T   T   G   T
+001 1   1   01  1   001 01  01  1   1   000 1
+
+la codifica ha 21 simboli, sono stati risparmiati 3 bit
+
+confronto
+Ascii:      000101100100101001011101
+Huffman:    001110110010101110001
+
+Passando dalla stringa binaria ai simboli richiede la conoscenza dell'albero.
+In corrispondenza della radice dell'albero si leggono i bit scendendo nei
+nodi fino ad arrivare ad una foglia. Una volta arrivato alla foglia si risale
+alla radice centrale.
+- interpreto i bit come "scendi dx" o "scendi sx"
+- guardo se sono arrivato in una foglia
+- se sono in una foglia, ritorno il carattere e torno alla radice
+
+Un altro esempio di albero di Huffman
+ ILTEATROALLIETALASERATA :23
+   /            \
+  ()            ()
+  /\            /\
+ T  ()         A  ()
+    /\            /\
+   R  E          () L
+                 /\
+                ()  I
+                /\
+               O  S
+A: 10
+E: 011
+I: 1101
+O: 11000
+L: 111
+R: 010
+S: 11001
+T: 00
+
+In questo caso A e T sono rappresentati da 2 bit
+mentre O e S sono rappresentati da 5 bit
+
+Questo metodo è più suscettibile agli errori rispetto a
+una tavola ascii

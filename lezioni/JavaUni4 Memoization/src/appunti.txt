@@ -1,0 +1,79 @@
+ASTRAZIONE SULLO STATO
+
+top down:
+    un problema piu grande scomposto in problemi minori con funzioni specifiche
+
+COME FUNZIONE MANHATTAN
+date le coord (x,y)
+è un coefficente binomiale fra la somma delle coordinate e lo spostamento in orizziontale
+
+manh=   (x+y)!/ x! ((x+y) -x)!
+
+gli array vengono passati per riferimento
+NB equals() è differente da == :
+    equals()    confronta il contenuto dell'oggetto
+    ==          confronta l'indirizzo dell'oggetto
+
+ES :
+array1= {1,2,3};
+array2= {1,2,3};
+array1.equals(array2) -> TRUE
+array1 == array2 -> FALSE
+
+
+tutti gli oggetti vengono passati per riferimento
+
+MATRICE MEM LEZ 38 MIN 15 CA
+dentro le caselle sono segnati i modi possibili
+per arrivarci partendo da (x,y)= (0,0)
+
+  0    1    2     3     4     5
+0 [1]  [1]  [1]   [1]   [1]   [1]   // prima riga e colonna sempre 1
+1 [1]  [2]  [3]   [4]   [5]   [6]   // il numero sopra + il numero a dx es: (2,1)= (2,0) + (1,1)= 1 + 2= 3
+2 [1]  [3]  [6]   [10]  [15]  [21]
+3 [1]  [4]  [10]  [20]  [35]  [56]
+4 [1]  [5]  [15]  [35]  [70]  [126]
+
+
+LLCS: TOP DOWN
+
+
+BOTTOM UP SENZA RICORSIONE FORMALE
+
+Le celle rappresentano la lunghezza delle
+sotto sequenze comuni
+
+  A     T     R     I     O     //
+A [3]   [2]   [2]   [1]  [1]   [0] 4
+      \
+R [2]   [2]   [2]   [1]  [1]   [0] 3
+                  \
+T [2]   [2]   [1]   [1]  [1]   [0] 2
+            \
+O [1]   [1]   [1]   [1]  [1]   [0] 1
+                             \
+//[0]   [0]   [0]   [0]  [0]   [0] 0
+   5     4     3     2    1     0
+
+LOGICA: confronta il primo car delle stringhe
+        se sono uguali somma 1 al risultato della diagonale , altrimenti tiene il caso migliore.
+        Il caso migliore è la cella adiacente (a dx o sotto) con il valore più alto
+
+        Il caso base è "" confrontato a "" che vale 0
+   (y, x)
+   (0, x) V (y, 0): confronto di "" con una stringa,
+                    caso base, essendo "" vuota, non ci sono caratteri in comune
+   (1,1): confronto "O" con "O", 1 carattere uguale
+          nelle stringhe
+   (1, 2): confronto di "O" con "IO", caratteri iniziali differenti,
+           tengo la sottostringa migliore che per ora vale 1
+   (2, 1): confronto di "TO" con "O", primo car diverso, tengo migliore
+   (2, 2): confronto di "TO" con "IO", primo car diverso, tengo migliore
+   (2, 3): confronto di "TO" con "RIO", primo car diverso, tengo migliore
+   (2, 4): confronto di "TO" con "TRIO", primo car uguale, 1 + (1 , 3)
+   (2, 5): confronto di "TO" con "ATRIO",primo car diverso, tengo migliore
+   ...
+   (3, 3): confronto di "RTO" con "RIO": primo car uguale, 1 + (2 , 2)
+   ...
+   (4, 3): confronto di "ARTO" con "RIO": primo car diverso, tengo migliore fra (4,2) e (3,3)
+   (3, 3): confronto di "ARTO" con "ATRIO": primo car uguale, 1 + (3 , 4)

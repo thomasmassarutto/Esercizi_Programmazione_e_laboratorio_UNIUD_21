@@ -1,0 +1,57 @@
+Correttezza dei programmi iterativi
+versione iterativa della moltiplicazione
+
+METODO EGIZIO/ RUSSO
+G=Migliaia
+P=Centinaia
+N=Decine
+I=Unita
+13 * 83
+
+ NIII   *   NNNNNNNNIII
+
+2^i         x
+
+    I^      NNNNNNNNIII
+
+   II       NNNNNNNNIII     -> PNNNNNNIIIIII
+            NNNNNNNNIII
+
+ IIII^      PNNNNNNIIIIII   -> PPPNNNII
+            PNNNNNNIIIIII
+
+ IIII^      PPPPPPNNNNNNIIII
+ IIII
+
+
+
+NNNNNNNNIII + PPPNNNII + PPPPPPNNNNNNIIII = GNNNNNNNIIIIIIIII
+
+13= 1+4+8= I + III + IIII = NIII
+                     IIII
+
+Sapendo i risultati di 83 * 1,3,8 sommo il tutto
+
+INVAIANTE ALL'INIZIO
+// m, n >= 0
+// x,y,z : interi
+
+xy+z = mn + 0 = mn
+
+CONSERVAZIONE INVARIANTE
+// xy + z = mn
+se (y mod 2) > 0{// se y è dispari...
+    z:= z + x
+}
+x:= 2*x
+y:= y div 2
+
+y pari
+    (2x) (y/2) + z = xy + z = mn
+y dispari
+    (2x) ((y-1)/2) + (z+x)=
+    x(y-1) + z + x = xy + z = mn
+
+// INVARIANTE ALLA FINE
+y=0
+    z = xy + z = mn

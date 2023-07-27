@@ -1,5 +1,9 @@
 # Escludi tutti i file PDF
 *.pdf
-
+# escludi iml
+*.iml
 # Escludi tutte le cartelle chiamate "tentativi" e il loro contenuto
 **/tentativi/
+
+**/.idea/
+**/out/

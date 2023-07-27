@@ -1,0 +1,116 @@
+
+THREE SEARCH
+
+Come fare una visita sistematica senza perdersi qualcosa.
+Criterio ricorsivo che visita l'albero delle possibili configurazioni.
+Nei nodi ci sono le configurazioni parziali (compresa la vuota).
+Nelle foglie vi sono le soluzioni e i vicoli ciechi.
+
+CRITERIO
+Partendo dalla riga più in alto posiziono regine
+
+Prima metto una regina in tutti i modi possibili
+poi nella seconda senza violare i criteri del gioco
+e così via
+
+Nodo nullo: radice
+    OOOO
+    OOOO
+    OOOO
+    OOOO
+
+1 nodo: 1 regina per casella
+    D1      D2      D3      D4
+    XOOO    OXOO    OOXO    OOOX
+    OOOO    OOOO    OOOO    OOOO
+    OOOO    OOOO    OOOO    OOOO
+    OOOO    OOOO    OOOO    OOOO
+
+
+2 nodo
+Da D1
+    D1,1    D1,2
+    XOOO    XOOO
+    OOXO    OOOX
+    OOOO    OOOO
+    OOOO    OOOO
+
+Da D2
+    D2,1
+    OXOO
+    OOOX
+    OOOO
+    OOOO
+
+3 nodo
+Da D1,1
+    D1,1,1
+    XOOO
+    OOXO
+    OOOO
+    OOOO
+
+    No discendenti
+
+Da D1,2
+    D1,2,1
+    XOOO
+    OOOX
+    OXOO
+    OOOO
+
+
+Da D2,1
+    D2,1,1
+    OXOO
+    OOOX
+    XOOO
+    OOOO
+
+4 nodo
+Da D1,2
+    D1,2,1
+    XOOO
+    OOOX
+    OXOO
+    OOOO
+
+No discendenti
+
+Da D2,1,1
+    D2,1,1,1
+    OXOO
+    OOOX
+    XOOO
+    OOXO
+
+    OK!
+
+E così via finchè l'albero non è completo
+
+CONTROLLO SE CE' PERICOLO
+
+i,j --> c'è regina
+u,v --> voglio mettere regina
+
+                        MINACCIATA SE:
+- stessa riga:          i=u
+- stessa colonna:       j=v
+- stessa diagonale /:   i-j=u-v
+- stessa diagonale \:   u+v=i+j
+
+4 [ ][ ][ ][ ]
+3 [ ][ ][ ][X]
+2 [ ][ ][X][ ]
+1 [ ][X][ ][ ]
+   1  2  3  4
+
+ES:
+La diagonale / contrassegnata con X
+ha differenza costante -1:
+row   col
+1  -  2  = -1
+2  -  3  = -1
+3  -  4  = -1
+
+NB: esistono 2 tipi di diagonale / e \!

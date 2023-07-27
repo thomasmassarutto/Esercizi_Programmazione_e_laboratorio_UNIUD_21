@@ -1,0 +1,36 @@
+Contando i cons capiamo quanto il programma risulta pesante
+
+V1)
+AZIONI              NR.CONS
+inizializzazione:
+range               n-1
+ripetizione:
+servisidro          0
+passabrocca         k-1 (k: nr cav)
+
+
+I(n)= n-1
+PB(k)= k-1 (k=n)
+
+CToT(n) = I(n) + sum{1}{n-1}(PB (i)) + 0
+        = I(n) + PB(k-1) + ... + PB(1) + 0
+        = n(n-1)/2
+        = circa n^2*1/2
+V OTT)
+AZIONI              NR.CONS
+inizializzazione:
+range               n-1 = (circa n)
+ripetizione:
+servisidro          0 |
+passabrocca         1 | (k: nr cav)
+
+
+I(n)= n-1
+PB(k)= 1 (almeno) +
+PB2(k)= (reverse?)
+
+CToT(n) = I(n) + n-1 * 1
+        = n + n + n/2 + n/4 + .. +1= 2n + n (1/2 + 1/4 + ...)
+        = 2n + n(1) = 3n
+
+La versione ottimizzata lavora meglio con i numeri alti.
